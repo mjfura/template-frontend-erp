@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 import './globals.css'
 import { Inter } from 'next/font/google'
 import { Metadata } from 'next'
-
+import { ThemeProvider } from '../components'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata:Metadata = {
@@ -16,6 +16,7 @@ export default function RootLayout ({
   children: ReactNode
 }) {
   return (
+    <ThemeProvider>
     <html lang="es">
       <body className={inter.className}>
         <main>
@@ -23,5 +24,6 @@ export default function RootLayout ({
         </main>
       </body>
     </html>
+    </ThemeProvider>
   )
 }
