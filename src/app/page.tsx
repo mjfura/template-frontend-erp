@@ -1,4 +1,4 @@
-import { LoginForm } from './components'
+import { LoginForm, PanelError } from './components'
 import { empresaUseCase } from '@/core/Empresas/dependencies'
 import { getSubdominio } from '@/utils'
 
@@ -12,7 +12,11 @@ export default async function Login () {
       {
         response.status
           ? <LoginForm empresa={response.data} />
-          : <h2>{response.message}</h2>
+          : <PanelError data={{
+            title: response.title,
+            message: response.message,
+            code: 500
+          }} />
       }
       </div>
     </section>

@@ -12,7 +12,7 @@ function LoginForm ({ empresa }:PropTypes.InferProps<typeof LoginForm.propTypes>
                     {
                       htmlFor: 'correo'
                     }
-                  } name='correo' id='correo' className='text-xl' variant="standard" color='white' size="lg" label="Correo" placeholder='Correo' />
+                  } name='correo' id='correo' className='text-xl' variant="standard" color='white' size="lg" label="Correo" />
                   <Input labelProps={
                     {
                       htmlFor: 'password'
