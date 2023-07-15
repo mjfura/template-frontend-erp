@@ -1,10 +1,11 @@
 'use client'
 import PropTypes from 'prop-types'
-import { Card, Typography, Input, Button } from '../../components'
+import { Card, Typography, Input, Button, Spinner } from '../../components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { ILoginForm } from '@/core/Validators/infraestructure/types'
 import { loginResolver } from '@/core/Validators/infraestructure/dependencies'
 import { useBoolean } from '@/components/hooks'
+import { authUseCase } from '@/core/Auth/infraestructure/dependencies'
 function LoginForm ({ empresa }:PropTypes.InferProps<typeof LoginForm.propTypes>) {
   const {
     register,
@@ -19,22 +20,13 @@ function LoginForm ({ empresa }:PropTypes.InferProps<typeof LoginForm.propTypes>
   })
   const { toggle, value: loading } = useBoolean(false)
   const onSubmit: SubmitHandler<ILoginForm> = async data => {
-    try {
-      toggle()
-      const response = await signIn('credentials', {
-        correo: data.email,
-        password: data.password,
-        redirect: false,
-        callbackUrl: `${basePath}/userAccount`
-      })
-      if (response?.error) throw new Error(response.error)
-      push(PrivateRoutes.Home)
-    } catch (e) {
-      console.log('error in login: ', e)
-      handlerUIError(e)
-    } finally {
-      toggle()
-    }
+    toggle()
+    const response = await authUseCase.login({
+      ...data,
+      idEmpresa: '0'
+    })
+    console.log(response)
+    toggle()
   }
   return (
       <Card className='p-4' color="transparent" shadow={false}>
@@ -54,10 +46,13 @@ function LoginForm ({ empresa }:PropTypes.InferProps<typeof LoginForm.propTypes>
                     }
                   } name='password' id='password' className='text-xl' variant="standard" color='white' type='password' size="lg" label="Contraseña" />
               </div>
-
-              <Button color="white" className="mt-6" fullWidth>
+                {
+                  loading
+                    ? <Spinner/>
+                    : <Button color="white" className="mt-6" fullWidth>
                   Ingresar
               </Button>
+                }
 
           </form>
       </Card>
