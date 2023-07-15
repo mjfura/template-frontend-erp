@@ -23,7 +23,7 @@ function LoginForm ({ empresa }:PropTypes.InferProps<typeof LoginForm.propTypes>
     toggle()
     const response = await authUseCase.login({
       ...data,
-      idEmpresa: '0'
+      idEmpresa: empresa.id
     })
     console.log(response)
     toggle()
@@ -34,22 +34,29 @@ function LoginForm ({ empresa }:PropTypes.InferProps<typeof LoginForm.propTypes>
               {empresa.nombre}
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)} data-testid="frmLogin" className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+
               <div className="mb-4 flex flex-col gap-6">
                   <Input error={!!errors.correo} {...register('correo')} labelProps={
                     {
                       htmlFor: 'correo'
                     }
                   } name='correo' id='correo' className='text-xl' variant="standard" color='white' size="lg" label="Correo" />
+                  {
+                    errors.correo && <p className='text-sm text-red-500 font-bold' >{errors.correo.message}</p>
+                  }
                   <Input error={!!errors.password} {...register('password')} labelProps={
                     {
                       htmlFor: 'password'
                     }
                   } name='password' id='password' className='text-xl' variant="standard" color='white' type='password' size="lg" label="Contraseña" />
+          {
+            errors.password && <p className='text-sm text-red-500 font-bold' >{errors.password.message}</p>
+          }
               </div>
                 {
                   loading
                     ? <Spinner/>
-                    : <Button color="white" className="mt-6" fullWidth>
+                    : <Button color="white" className="mt-6" type='submit' fullWidth>
                   Ingresar
               </Button>
                 }
