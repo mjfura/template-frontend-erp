@@ -1,4 +1,4 @@
 export interface LoginValidatorEntity{
-    email:string,
+    correo:string,
     password:string
 }
