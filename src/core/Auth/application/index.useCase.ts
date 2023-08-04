@@ -4,10 +4,11 @@ import { AuthRepository, LoginCredentialsEntity, LoginCredentialsValue } from '.
 export class AuthUseCase {
   // eslint-disable-next-line no-useless-constructor
   constructor (private readonly repository:AuthRepository) {}
-  public async login (credentials:LoginCredentialsEntity):Promise<ErrorResponserValue|SuccessResponserValue<any>> {
+  public async login (credentials:LoginCredentialsEntity, basePath:string):Promise<ErrorResponserValue|SuccessResponserValue<any>> {
     try {
       const credentialsValue = new LoginCredentialsValue(credentials)
-      const data = await this.repository.login(credentialsValue)
+      const data = await this.repository.login(credentialsValue, basePath)
+      console.log('data usecase ', data)
       return data
     } catch (e) {
       const error = new ErrorResponserValue({

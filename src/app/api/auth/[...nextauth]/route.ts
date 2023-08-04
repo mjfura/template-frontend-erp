@@ -1,6 +1,8 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import type { NextAuthOptions } from 'next-auth'
+import { api } from '@/config'
+import axios, { AxiosError } from 'axios'
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -21,16 +23,24 @@ export const authOptions: NextAuthOptions = {
         try {
           if (credentials == null) { throw new Error('No se proporcionó las credenciales') }
           const { correo, password, idEmpresa } = credentials
-          // const data = await login({ email: correo, password })
-          console.log('data auth', correo, password, idEmpresa)
+          const { data } = await api.post('/auth/login', { correo, password, idEmpresa })
+          console.log('data auth', data)
           return {
-            email: 'micorreo@gmail.com',
-            token: 'sds',
-            name: 'jhon doe',
-            id: '1'
+            email: data.data.correo,
+            token: data.data.token,
+            name: data.data.nombres,
+            id: data.data.id
           }
         } catch (err) {
           console.log('error ', err)
+          if (axios.isAxiosError(err)) {
+            const error = err as AxiosError<{
+            message: string
+            title: string
+            status: boolean
+            }>
+            throw new Error(error.response?.data.message || 'Ha ocurrido un error en la petición')
+          }
           const error = err as Error
 
           throw new Error(error.message || 'No se pudo autenticar')

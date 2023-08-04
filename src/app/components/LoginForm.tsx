@@ -1,11 +1,15 @@
 'use client'
 import PropTypes from 'prop-types'
-import { Card, Typography, Input, Button, Spinner } from '../../components'
+import { Card, Typography, Input, Button, Spinner, Dialog, DialogHeader, DialogBody } from '../../components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { ILoginForm } from '@/core/Validators/infraestructure/types'
 import { loginResolver } from '@/core/Validators/infraestructure/dependencies'
 import { useBoolean } from '@/components/hooks'
 import { authUseCase } from '@/core/Auth/infraestructure/dependencies'
+import { useRouter } from 'next/navigation'
+import { BASE_PATH } from '@/config'
+import { ErrorResponserValue } from '@/core/Responsers/domain'
+import { useState } from 'react'
 function LoginForm ({ empresa }:PropTypes.InferProps<typeof LoginForm.propTypes>) {
   const {
     register,
@@ -19,14 +23,31 @@ function LoginForm ({ empresa }:PropTypes.InferProps<typeof LoginForm.propTypes>
     }
   })
   const { toggle, value: loading } = useBoolean(false)
+  const { on, toggle: handler, value: isOpen } = useBoolean(false)
+  const [alert, setAlert] = useState({
+    title: '',
+    message: ''
+  })
+  const { push } = useRouter()
+
   const onSubmit: SubmitHandler<ILoginForm> = async data => {
     toggle()
     const response = await authUseCase.login({
       ...data,
       idEmpresa: empresa.id
-    })
+    }, BASE_PATH)
     console.log(response)
+    if (response instanceof ErrorResponserValue) {
+      setAlert({
+        title: response.title,
+        message: response.message
+      })
+      toggle()
+      on()
+      return
+    }
     toggle()
+    push('/account')
   }
   return (
       <Card className='p-4' color="transparent" shadow={false}>
@@ -62,6 +83,13 @@ function LoginForm ({ empresa }:PropTypes.InferProps<typeof LoginForm.propTypes>
                 }
 
           </form>
+          <Dialog open={isOpen} handler={handler} >
+            <DialogHeader>{alert.title}</DialogHeader>
+            <DialogBody divider>
+              {alert.message}
+            </DialogBody>
+
+          </Dialog>
       </Card>
   )
 }

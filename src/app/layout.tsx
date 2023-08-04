@@ -6,8 +6,8 @@ import { ThemeProvider } from '../components'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata:Metadata = {
-  title: 'MyGym',
-  description: 'Plataforma para la gestión avanzada de gimnasios'
+  title: 'Enterprise Manager',
+  description: 'Plataforma para la gestión avanzada de inventariado'
 }
 
 export default function RootLayout ({
@@ -16,14 +16,14 @@ export default function RootLayout ({
   children: ReactNode
 }) {
   return (
-    <ThemeProvider>
     <html lang="es">
       <body className={inter.className}>
         <main>
+      <ThemeProvider>
         {children}
+    </ThemeProvider>
         </main>
       </body>
     </html>
-    </ThemeProvider>
   )
 }

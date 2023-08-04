@@ -7,7 +7,7 @@ export default async function Login () {
   const response = await empresaUseCase.getInfoEmpresa(subdominio)
 
   return (
-    <section className="flex min-h-screen bg-[url('/img/gym_bg.jpg')] bg-no-repeat bg-center bg-cover">
+    <section className="flex min-h-screen bg-[url('/img/bg_login.jpeg')] bg-no-repeat bg-center bg-cover">
       <div className='bg-[rgba(0,0,0,0.7)] flex flex-1 justify-center items-center min-h-screen' >
       {
         response.status
