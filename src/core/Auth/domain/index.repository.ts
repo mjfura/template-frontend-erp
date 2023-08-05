@@ -2,5 +2,6 @@ import { ErrorResponserValue, SuccessResponserValue } from '@/core/Responsers/do
 import { LoginCredentialsValue } from './index.value'
 
 export interface AuthRepository{
-    login:(credentials:LoginCredentialsValue, basePath:string)=>Promise<SuccessResponserValue<any>|ErrorResponserValue>
+    login:(credentials:LoginCredentialsValue, basePath:string)=>Promise<SuccessResponserValue<any>|ErrorResponserValue>,
+    logout:()=>Promise<undefined>
 }

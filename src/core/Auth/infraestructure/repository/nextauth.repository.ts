@@ -1,6 +1,6 @@
 import { ErrorResponserValue, SuccessResponserValue } from '@/core/Responsers/domain'
 import { AuthRepository, LoginCredentialsValue } from '../../domain'
-import { signIn } from 'next-auth/react'
+import { signIn, signOut } from 'next-auth/react'
 
 export class NextAuthRepository implements AuthRepository {
   async login (credentials:LoginCredentialsValue, basePath:string): Promise<SuccessResponserValue<any> | ErrorResponserValue> {
@@ -43,6 +43,14 @@ export class NextAuthRepository implements AuthRepository {
         message: 'No se pudo iniciar sesión correctamente',
         title: 'Error'
       })
+    }
+  }
+
+  async logout ():Promise<undefined> {
+    try {
+      await signOut()
+    } catch (e) {
+      console.log('Error al hacer un logout repository ', e)
     }
   }
 }

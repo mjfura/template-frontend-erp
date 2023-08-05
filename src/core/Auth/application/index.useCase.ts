@@ -19,4 +19,12 @@ export class AuthUseCase {
       return error
     }
   }
+
+  public async logout ():Promise<undefined> {
+    try {
+      await this.repository.logout()
+    } catch (e) {
+      console.log('Error al hacer un logout ', e)
+    }
+  }
 }

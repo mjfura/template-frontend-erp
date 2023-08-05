@@ -1,10 +1,10 @@
 'use client'
 import React from 'react'
 import { Button } from '../../../components'
-import { signOut } from 'next-auth/react'
+import { authUseCase } from '@/core/Auth/infraestructure/dependencies'
 function LogoutButton () {
   const handler = () => {
-    signOut()
+    authUseCase.logout()
   }
   return (
        <Button onClick={handler}>
