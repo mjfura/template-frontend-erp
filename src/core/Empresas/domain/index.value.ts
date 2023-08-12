@@ -3,8 +3,10 @@ import { Empresa } from './index.entity'
 export class EmpresaValue implements Empresa {
   public readonly id: string
   public readonly nombre:string
-  constructor ({ id, nombre }:Empresa) {
+  public readonly subdominio:string
+  constructor ({ id, nombre, subdominio }:Empresa) {
     this.id = id
     this.nombre = nombre
+    this.subdominio = subdominio
   }
 }

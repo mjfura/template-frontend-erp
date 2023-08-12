@@ -20,9 +20,9 @@ export class AuthUseCase {
     }
   }
 
-  public async logout ():Promise<undefined> {
+  public async logout (basepath:string):Promise<undefined> {
     try {
-      await this.repository.logout()
+      await this.repository.logout(basepath)
     } catch (e) {
       console.log('Error al hacer un logout ', e)
     }

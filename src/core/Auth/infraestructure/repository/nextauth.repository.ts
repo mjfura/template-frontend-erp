@@ -46,9 +46,10 @@ export class NextAuthRepository implements AuthRepository {
     }
   }
 
-  async logout ():Promise<undefined> {
+  async logout (basepath:string):Promise<undefined> {
     try {
-      await signOut()
+      console.log('callback basepath sign out', basepath)
+      await signOut({ callbackUrl: basepath, redirect: false })
     } catch (e) {
       console.log('Error al hacer un logout repository ', e)
     }

@@ -3,6 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import type { NextAuthOptions } from 'next-auth'
 import { api } from '@/config'
 import axios, { AxiosError } from 'axios'
+import { generateBasepath } from '@/utils'
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -19,7 +20,7 @@ export const authOptions: NextAuthOptions = {
         password: { type: 'password' },
         idEmpresa: { type: 'text' }
       },
-      async authorize (credentials, req) {
+      async authorize (credentials, _req) {
         try {
           if (credentials == null) { throw new Error('No se proporcionó las credenciales') }
           const { correo, password, idEmpresa } = credentials
@@ -29,7 +30,13 @@ export const authOptions: NextAuthOptions = {
             email: data.data.correo,
             token: data.data.token,
             name: data.data.nombres,
-            id: data.data.id
+            id: data.data.id,
+            permiso: data.data.permiso,
+            empresa_nombre: data.data.empresa_nombre,
+            empresa_subdominio: data.data.empresa_subdominio,
+            empresa_id: data.data.empresa_id,
+            empresa_basepath: generateBasepath(data.data.empresa_subdominio)
+
           }
         } catch (err) {
           console.log('error ', err)
@@ -57,8 +64,13 @@ export const authOptions: NextAuthOptions = {
           ...token,
           email: user.email,
           name: user.name,
+          permiso: user.permiso,
           id: user.id,
-          accessToken: user.token
+          accessToken: user.token,
+          empresa_nombre: user.empresa_nombre,
+          empresa_subdominio: user.empresa_subdominio,
+          empresa_id: user.empresa_id,
+          empresa_basepath: user.empresa_basepath
         }
       }
       return token
@@ -67,20 +79,34 @@ export const authOptions: NextAuthOptions = {
       const payload = token as {
                 email: string
                 accessToken: string
+                permiso:'1'|'2'
                 id: string
                 name: string
+                empresa_nombre: string
+                empresa_subdominio: string
+                empresa_id: string
+                empresa_basepath: string
             }
       session.accessToken = payload.accessToken
       session.user = {
         ...session.user,
         email: payload.email,
+        permiso: payload.permiso,
         name: payload.name,
         id: payload.id
+      }
+      session.empresa = {
+        id: payload.empresa_id,
+        nombre: payload.empresa_nombre,
+        subdominio: payload.empresa_subdominio,
+        basepath: payload.empresa_basepath
       }
       console.log('session', session)
       return session
     }
+
   }
+
 }
 const handler = NextAuth({
   ...authOptions

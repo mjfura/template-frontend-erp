@@ -4,7 +4,8 @@ const nextConfig = {
     API_URL: process.env.API_URL,
     BASE_PATH: process.env.BASE_PATH,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    DOMINIO: process.env.DOMINIO
   }
 }
 

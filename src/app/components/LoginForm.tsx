@@ -7,7 +7,6 @@ import { loginResolver } from '@/core/Validators/infraestructure/dependencies'
 import { useBoolean } from '@/components/hooks'
 import { authUseCase } from '@/core/Auth/infraestructure/dependencies'
 import { useRouter } from 'next/navigation'
-import { BASE_PATH } from '@/config'
 import { ErrorResponserValue } from '@/core/Responsers/domain'
 import { useState } from 'react'
 function LoginForm ({ empresa }:PropTypes.InferProps<typeof LoginForm.propTypes>) {
@@ -32,10 +31,11 @@ function LoginForm ({ empresa }:PropTypes.InferProps<typeof LoginForm.propTypes>
 
   const onSubmit: SubmitHandler<ILoginForm> = async data => {
     toggle()
+    console.log('basepath ', empresa.basepath)
     const response = await authUseCase.login({
       ...data,
       idEmpresa: empresa.id
-    }, BASE_PATH)
+    }, empresa.basepath)
     console.log(response)
     if (response instanceof ErrorResponserValue) {
       setAlert({
@@ -97,6 +97,8 @@ function LoginForm ({ empresa }:PropTypes.InferProps<typeof LoginForm.propTypes>
 LoginForm.propTypes = {
   empresa: PropTypes.shape({
     nombre: PropTypes.string.isRequired,
+    subdominio: PropTypes.string.isRequired,
+    basepath: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     logo: PropTypes.string
   }).isRequired

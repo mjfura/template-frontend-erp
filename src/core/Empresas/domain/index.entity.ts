@@ -1,4 +1,5 @@
 export interface Empresa{
     id:string,
-    nombre:string
+    nombre:string,
+    subdominio:string
 }

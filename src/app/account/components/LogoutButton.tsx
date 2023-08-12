@@ -2,9 +2,15 @@
 import React from 'react'
 import { Button } from '../../../components'
 import { authUseCase } from '@/core/Auth/infraestructure/dependencies'
-function LogoutButton () {
-  const handler = () => {
-    authUseCase.logout()
+import { useRouter } from 'next/navigation'
+interface Props{
+  basepath:string
+}
+function LogoutButton ({ basepath }:Props) {
+  const { push } = useRouter()
+  const handler = async () => {
+    await authUseCase.logout(basepath)
+    push('/')
   }
   return (
        <Button onClick={handler}>

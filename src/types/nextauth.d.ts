@@ -10,7 +10,14 @@ declare module 'next-auth' {
     user: {
       email:string,
       name:string
-      id:string
+      id:string,
+      permiso:'1'|'2'
+    },
+    empresa:{
+      nombre:string,
+      id:string,
+      subdominio:string,
+      basepath:string
     }
     accessToken:string
   }
@@ -19,7 +26,12 @@ declare module 'next-auth' {
     token:string,
       email:string,
       id:string,
-      name:string
+      name:string,
+      permiso:'1'|'2',
+      empresa_id:string,
+      empresa_nombre:string,
+      empresa_subdominio:string,
+      empresa_basepath:string
   }
 
 }

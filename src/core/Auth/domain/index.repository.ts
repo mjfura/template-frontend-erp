@@ -3,5 +3,5 @@ import { LoginCredentialsValue } from './index.value'
 
 export interface AuthRepository{
     login:(credentials:LoginCredentialsValue, basePath:string)=>Promise<SuccessResponserValue<any>|ErrorResponserValue>,
-    logout:()=>Promise<undefined>
+    logout:(basepath:string)=>Promise<undefined>
 }
