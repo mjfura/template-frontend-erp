@@ -6,4 +6,12 @@ export class ValidatorUseCase {
   public loginValidator () {
     return this.repository.loginValidator()
   }
+
+  public createUserValidator () {
+    return this.repository.createUserValidator()
+  }
+
+  public editUserValidator () {
+    return this.repository.editUserValidator()
+  }
 }

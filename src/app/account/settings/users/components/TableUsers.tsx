@@ -1,57 +1,15 @@
+import { defaultValues } from '@/app/account/constants'
 import { Avatar, Button, Card, CardBody, CardFooter, CardHeader, Chip, IconButton, Input, Tooltip, Typography } from '@/components'
-import { ChevronUpDownIcon, MagnifyingGlassIcon, PencilIcon, UserPlusIcon } from '@heroicons/react/24/outline'
+import { UserValue } from '@/core/Users/domain'
+import { ChevronUpDownIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { ButtonModalCreateUser } from './ButtonModalCreateUser'
 
-const TABLE_HEAD = ['Nombres', 'Function', 'Status', 'Employed', 'Opciones']
+const TABLE_HEAD = ['Nombres', 'Tipo', 'Último Inicio de Sesión', 'Creado', 'Opciones']
 
-const TABLE_ROWS = [
-  {
-    img: 'https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg',
-    name: 'John Michael',
-    email: 'john@creative-tim.com',
-    job: 'Manager',
-    org: 'Organization',
-    online: true,
-    date: '23/04/18'
-  },
-  {
-    img: 'https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg',
-    name: 'Alexa Liras',
-    email: 'alexa@creative-tim.com',
-    job: 'Programator',
-    org: 'Developer',
-    online: false,
-    date: '23/04/18'
-  },
-  {
-    img: 'https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg',
-    name: 'Laurent Perrier',
-    email: 'laurent@creative-tim.com',
-    job: 'Executive',
-    org: 'Projects',
-    online: false,
-    date: '19/09/17'
-  },
-  {
-    img: 'https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg',
-    name: 'Michael Levi',
-    email: 'michael@creative-tim.com',
-    job: 'Programator',
-    org: 'Developer',
-    online: true,
-    date: '24/12/08'
-  },
-  {
-    img: 'https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg',
-    name: 'Richard Gran',
-    email: 'richard@creative-tim.com',
-    job: 'Manager',
-    org: 'Executive',
-    online: false,
-    date: '04/10/21'
-  }
-]
-
-export function TableUsers () {
+interface Props{
+    listUsers:UserValue[]
+}
+export function TableUsers ({ listUsers }:Props) {
   return (
         <Card className="h-full w-full">
             <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -63,16 +21,14 @@ export function TableUsers () {
 
                     </div>
                     <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-                        <Button className="flex items-center gap-3" size="sm">
-                            <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Agregar Usuario
-                        </Button>
+                        <ButtonModalCreateUser/>
                     </div>
                 </div>
                 <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
 
                     <div className="w-full md:w-72">
                         <Input
-                            label="Search"
+                            label="Buscar"
                             icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                         />
                     </div>
@@ -102,61 +58,44 @@ export function TableUsers () {
                         </tr>
                     </thead>
                     <tbody>
-                        {TABLE_ROWS.map(
-                          ({ img, name, email, job, org, online, date }, index) => {
-                            const isLast = index === TABLE_ROWS.length - 1
+                        {listUsers.map(
+                          ({ correo, creado, id, lastLogin, nombres, permiso, photo }, index) => {
+                            const isLast = index === listUsers.length - 1
                             const classes = isLast
                               ? 'p-4'
                               : 'p-4 border-b border-blue-gray-50'
 
                             return (
-                                    <tr key={name}>
+                                    <tr key={id}>
                                         <td className={classes}>
                                             <div className="flex items-center gap-3">
-                                                <Avatar src={img} alt={name} size="sm" />
+                                                <Avatar src={photo ?? defaultValues.PHOTO} alt={nombres} size="sm" />
                                                 <div className="flex flex-col">
                                                     <Typography
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {name}
+                                                        {nombres}
                                                     </Typography>
                                                     <Typography
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal opacity-70"
                                                     >
-                                                        {email}
+                                                        {correo}
                                                     </Typography>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className={classes}>
-                                            <div className="flex flex-col">
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal"
-                                                >
-                                                    {job}
-                                                </Typography>
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal opacity-70"
-                                                >
-                                                    {org}
-                                                </Typography>
-                                            </div>
-                                        </td>
+
                                         <td className={classes}>
                                             <div className="w-max">
                                                 <Chip
                                                     variant="ghost"
                                                     size="sm"
-                                                    value={online ? 'online' : 'offline'}
-                                                    color={online ? 'green' : 'blue-gray'}
+                                                    value={permiso === '1' ? 'Administrador' : 'Trabajador'}
+                                                    color={permiso === '1' ? 'green' : 'blue-gray'}
                                                 />
                                             </div>
                                         </td>
@@ -166,13 +105,27 @@ export function TableUsers () {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {date}
+                                            {typeof lastLogin === 'string' ? lastLogin : lastLogin.toLocaleDateString('es-ES')}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
-                                            <Tooltip content="Edit User">
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                            {creado.toLocaleDateString('es-ES')}
+                                            </Typography>
+                                        </td>
+                                        <td className={classes + ' flex justify-center'}>
+                                            <Tooltip content="Editar">
                                                 <IconButton variant="text">
                                                     <PencilIcon className="h-4 w-4" />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip content="Eliminar">
+                                                <IconButton variant="text" color='red' >
+                                                    <TrashIcon className="h-4 w-4" />
                                                 </IconButton>
                                             </Tooltip>
                                         </td>

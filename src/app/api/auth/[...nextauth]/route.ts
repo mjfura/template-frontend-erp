@@ -55,7 +55,9 @@ export const authOptions: NextAuthOptions = {
       }
     })
   ],
-
+  session: {
+    maxAge: 8 * 60 * 60
+  },
   callbacks: {
     async jwt ({ user, token, account }) {
       console.log('token', token)

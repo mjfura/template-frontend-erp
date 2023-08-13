@@ -1,6 +1,8 @@
 import { Resolver } from 'react-hook-form'
-import { LoginValidatorEntity } from './index.entity'
+import { CreateUserValidatorEntity, EditUserValidatorEntity, LoginValidatorEntity } from './index.entity'
 
 export interface ValidatorRepository{
     loginValidator():Resolver<LoginValidatorEntity>
+    createUserValidator():Resolver<CreateUserValidatorEntity>
+    editUserValidator():Resolver<EditUserValidatorEntity>
 }
