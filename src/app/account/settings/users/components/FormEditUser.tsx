@@ -6,6 +6,7 @@ import { Button, Card, CardBody, CardFooter, CardHeader, Input, Option, Select, 
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { useSWRConfig } from 'swr'
 
 interface Props {
     doAfter: () => void,
@@ -20,6 +21,7 @@ interface Props {
 export const FormEditUser = ({ doAfter, formValues }: Props) => {
   const { data: session, status } = useSession()
   const { launchSuccessAlert, successAlert, launchErrorAlert, errorAlert } = useAlert()
+  const { mutate } = useSWRConfig()
   const { push } = useRouter()
   const {
     register,
@@ -49,11 +51,13 @@ export const FormEditUser = ({ doAfter, formValues }: Props) => {
           permiso: data.permiso
         })
         if (response.status) {
-          doAfter()
+          mutate('/users/getUsersByEmpresa')
           return launchSuccessAlert({
             title: response.title,
             description: response.message,
-            onClose: () => {}
+            onClose: () => {
+              doAfter()
+            }
           })
         }
         return launchErrorAlert({

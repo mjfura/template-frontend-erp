@@ -10,7 +10,7 @@ interface Props{
 }
 export const ButtonModalEditUser = ({ idUser }:Props) => {
   const { value: isOpen, toggle } = useBoolean(false)
-  const { data, mutate } = useSWR('/users/getUserById/' + idUser, () => userUseCase.getUserById(idUser))
+  const { data } = useSWR('/users/getUserById/' + idUser, () => userUseCase.getUserById(idUser))
 
   return (
         <>
@@ -45,7 +45,7 @@ export const ButtonModalEditUser = ({ idUser }:Props) => {
                       nombres: data.data.nombre,
                       permiso: data.data.permiso
                     }
-                } doAfter={mutate} />
+                } doAfter={toggle} />
                 }
             </Dialog>
         </>

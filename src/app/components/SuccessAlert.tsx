@@ -12,7 +12,8 @@ export function SuccessAlert ({ close, description, isOpen, title }:Props) {
         <>
             <Alert
                 open={isOpen}
-                className="max-w-screen-md fixed top-0 right-0"
+                color='green'
+                className="max-w-screen-md fixed top-0 right-0 z-50"
                 icon={<SuccessIcon />}
                 onClose={() => close()}
             >

@@ -88,6 +88,7 @@ export class AxiosRepository implements UserRepository {
     try {
       if (!id) throw new Error('No se envió el id del usuario')
       const { data } = await api.delete('/users/deleteUser?idUser=' + id)
+      console.log('data delete', data)
       return data
     } catch (e) {
       if (axios.isAxiosError(e)) {

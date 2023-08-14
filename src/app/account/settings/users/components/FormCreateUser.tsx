@@ -6,11 +6,13 @@ import { ICreateUserForm } from '@/core/Validators/infraestructure/types'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { useSWRConfig } from 'swr'
 interface Props{
     doAfter:()=>void
 }
 export const FormCreateUser = ({ doAfter }:Props) => {
   const { data: session, status } = useSession()
+  const { mutate } = useSWRConfig()
   const { launchSuccessAlert, successAlert, launchErrorAlert, errorAlert } = useAlert()
   const { push } = useRouter()
   const {
@@ -43,6 +45,7 @@ export const FormCreateUser = ({ doAfter }:Props) => {
           permiso: data.permiso
         })
         if (response.status) {
+          mutate('/users/getUsersByEmpresa')
           return launchSuccessAlert({
             title: response.title,
             description: response.message,
@@ -55,7 +58,6 @@ export const FormCreateUser = ({ doAfter }:Props) => {
           title: response.title,
           description: response.message,
           onClose: () => {
-            doAfter()
           }
         })
       }
@@ -65,7 +67,6 @@ export const FormCreateUser = ({ doAfter }:Props) => {
         title: 'Error',
         description: 'Error al crear el usuario',
         onClose: () => {
-          doAfter()
         }
       }
       )
