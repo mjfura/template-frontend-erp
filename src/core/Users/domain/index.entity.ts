@@ -1,6 +1,8 @@
 export interface UserEntity{
     id:string,
     nombres:string,
+    nombre:string,
+    apellido:string,
     correo:string,
     permiso:'1'|'2',
     photo:string,

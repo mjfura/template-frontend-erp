@@ -5,6 +5,8 @@ export const createUserAdapter = (response:UserResponse):UserValue => {
   return {
     id: response.id,
     nombres: response.nombre + ' ' + response.apellido,
+    nombre: response.nombre,
+    apellido: response.apellido,
     correo: response.correo,
     permiso: response.permiso,
     photo: response.photo,

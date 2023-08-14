@@ -27,7 +27,30 @@ export class UserUseCase {
     }
   }
 
-  public async editUser (idUser:string, user:Partial<UserValue>):Promise<ErrorResponserValue|SuccessResponserValue<{}>> {
+  public async getUserById (idUser:string):Promise<ErrorResponserValue|SuccessResponserValue<UserValue>> {
+    try {
+      const data = await this.repository.getUserById(idUser)
+      if (data instanceof ErrorResponserValue) return data
+      const result = new SuccessResponserValue({
+        title: 'Consulta exitosa',
+        message: 'Usuario encontrado exitosamente',
+        status: true,
+        data
+
+      })
+      return result
+    } catch (e) {
+      console.log('error use case ', e)
+      const error = new ErrorResponserValue({
+        title: 'Ha ocurrido un error',
+        message: 'Error en el caso de uso',
+        status: false
+      })
+      return error
+    }
+  }
+
+  public async editUser (idUser:string, user:Partial<Omit<UserPayload, 'empresa_id'|'password'>>):Promise<ErrorResponserValue|SuccessResponserValue<{}>> {
     try {
       const data = await this.repository.editUser(idUser, user)
       if (data instanceof ErrorResponserValue) return data

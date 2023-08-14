@@ -12,7 +12,7 @@ export function ErrorAlert ({ close, description, isOpen, title }: Props) {
         <>
             <Alert
                 open={isOpen}
-                className="max-w-screen-md"
+                className="max-w-screen-md fixed top-0 right-0"
                 icon={<ErrorIcon />}
                 onClose={() => close()}
             >

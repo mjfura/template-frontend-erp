@@ -7,4 +7,5 @@ export interface UserRepository{
     editUser:(id:string, user:Partial<UserValue>)=>Promise<SuccessResponserValue<{}>|ErrorResponserValue>
     deleteUser:(id:string)=>Promise<SuccessResponserValue<{}>|ErrorResponserValue>
     createUser:(user:UserPayload)=>Promise<SuccessResponserValue<{}>|ErrorResponserValue>
+    getUserById:(idUser:string)=>Promise<UserValue|ErrorResponserValue>
 }

@@ -3,7 +3,7 @@ import { UserPayload, UserRepository, UserValue } from '../../domain'
 import { api } from '@/config'
 import axios, { AxiosError } from 'axios'
 import { UserResponse } from '../types/responses/User.response'
-import { createUsersAdapter } from '../adapters'
+import { createUserAdapter, createUsersAdapter } from '../adapters'
 
 export class AxiosRepository implements UserRepository {
   async getUsersByEmpresa (idEmpresa: string): Promise<UserValue[] | ErrorResponserValue> {
@@ -45,11 +45,11 @@ export class AxiosRepository implements UserRepository {
     }
   }
 
-  async editUser (id: string, user: Partial<UserValue>) : Promise<SuccessResponserValue<{}> | ErrorResponserValue> {
+  async editUser (id: string, user: Partial<Omit<UserPayload, 'empresa_id'|'password'>>) : Promise<SuccessResponserValue<{}> | ErrorResponserValue> {
     try {
       if (!id) throw new Error('No se envió el id del usuario')
       const { data } = await api.put('/users/editUser', {
-        idUser: id,
+        id,
         ...user
       })
       return data
@@ -126,6 +126,43 @@ export class AxiosRepository implements UserRepository {
         ...payload
       })
       return data
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        const error = e as AxiosError<{
+        message: string
+        title: string
+        status: boolean
+      }>
+        console.log('error ', error)
+        return {
+          status: false,
+          message: error.response?.data?.message ?? 'Ruta errónea',
+          title: 'Error'
+        }
+      }
+      const error = e as Error
+      if (error.message) {
+        return {
+          status: false,
+          message: error.message,
+          title: 'Error'
+        }
+      }
+
+      return {
+        status: false,
+        message: 'No se pudo registrar el usuario',
+        title: 'Error'
+      }
+    }
+  }
+
+  async getUserById (idUser: string): Promise<UserValue | ErrorResponserValue> {
+    try {
+      if (!idUser) throw new Error('No se envió el id del usuario')
+      const { data } = await api.get(`/users/getUserById?idUser=${idUser}`)
+      const userResponse = data.data.usuario as UserResponse
+      return createUserAdapter(userResponse)
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const error = e as AxiosError<{

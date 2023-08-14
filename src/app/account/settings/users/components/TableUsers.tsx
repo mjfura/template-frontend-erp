@@ -1,8 +1,9 @@
 import { defaultValues } from '@/app/account/constants'
 import { Avatar, Button, Card, CardBody, CardFooter, CardHeader, Chip, IconButton, Input, Tooltip, Typography } from '@/components'
 import { UserValue } from '@/core/Users/domain'
-import { ChevronUpDownIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { ChevronUpDownIcon, MagnifyingGlassIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { ButtonModalCreateUser } from './ButtonModalCreateUser'
+import { ButtonModalEditUser } from './ButtonModalEditUser'
 
 const TABLE_HEAD = ['Nombres', 'Tipo', 'Último Inicio de Sesión', 'Creado', 'Opciones']
 
@@ -118,11 +119,7 @@ export function TableUsers ({ listUsers }:Props) {
                                             </Typography>
                                         </td>
                                         <td className={classes + ' flex justify-center'}>
-                                            <Tooltip content="Editar">
-                                                <IconButton variant="text">
-                                                    <PencilIcon className="h-4 w-4" />
-                                                </IconButton>
-                                            </Tooltip>
+                                            <ButtonModalEditUser idUser={id} />
                                             <Tooltip content="Eliminar">
                                                 <IconButton variant="text" color='red' >
                                                     <TrashIcon className="h-4 w-4" />
