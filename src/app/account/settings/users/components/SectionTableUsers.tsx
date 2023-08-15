@@ -16,24 +16,31 @@ export function SectionTableUsers ({ idEmpresa }:Props) {
     revalidateOnFocus: true
   })
   const [listUsers, setListUsers] = useState<UserValue[]>([])
+  const [search, setSearch] = useState<string>('')
   const [pagination, setPagination] = useState<Array<{
     label: string
     active: boolean
   }>>([])
   useEffect(() => {
     if (data && data.status) {
-      const length = Math.ceil(data.data.length / 10)
-      const arrayPagination = []
-      for (let i = 0; i < length; i++) {
-        arrayPagination.push({
-          label: `${i + 1}`,
-          active: i === 0 && pagination.length === 0
-        })
+      // FILTRO BUSCADOR POR NOMBRES
+      const listFiltrada = search ? data.data.filter(el => el.nombres.toLowerCase().includes(search)) : [...data.data]
+
+      // set pagination initial
+      const length = Math.ceil(listFiltrada.length / 10)
+      const arrayPagination = [...pagination]
+      if (arrayPagination.length === 0) {
+        for (let i = 0; i < length; i++) {
+          arrayPagination.push({
+            label: `${i + 1}`,
+            active: i === 0 && pagination.length === 0
+          })
+        }
+        setPagination(arrayPagination)
       }
-      setPagination(arrayPagination)
-      setListUsers([...data.data])
+      setListUsers(listFiltrada)
     }
-  }, [data])
+  }, [data, search])
   const setActivePage = (index:number) => {
     const array = [...pagination]
     array.forEach(item => { item.active = false })
@@ -76,6 +83,7 @@ export function SectionTableUsers ({ idEmpresa }:Props) {
 
                     <div className="w-full md:w-72">
                         <Input
+                            onChange={(e) => setSearch(e.target.value.toLowerCase())}
                             label="Buscar"
                             icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                         />
